@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" href="./login.css">    
+    </head>
+    <body background='/nol2021/img/background.jpg'>
+  <div class="container">
+    <div class="row" align="center">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h2 class="card-title text-center">Iniciar Sesión</h2>
+            <br/>
+            <form action="Login" method="post" class="form-signin">
+              <div class="form-label-group">
+                
+                <input type="text" id="inputEmail" name="dni" class="form-control" placeholder="Dni" required> 
+              
+              </div>
+				<br/>
+              <div class="form-label-group">
+                
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" required>
+                
+              </div>
+              <br/>
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Entrar</button>
+              <hr class="my-4">
+              <p align="center" class="peque">NOL - Notas OnLine</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="./js/bootstrap.min.js"></script>
+</body>
+ 
+</html>

@@ -1,0 +1,38 @@
+.azul{
+    background-color:#101F52;
+    color: white;
+    padding: 10px;
+    font-size: 175%;
+}
+
+.roles{
+    font-size: 150%;    
+    background-color:#2A9DF4;
+}
+.lista{
+    background: rgb(223, 221, 221);
+    font-size: 110%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+.roles #footer{
+    margin-top: 10%;
+    font-size: 80%;
+}
+
+.aumentar{
+	padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+	
+}
+
+.peque{
+	
+  margin-bottom: 2rem;
+  font-weight: 300;
+  font-size: 70%;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lista Alumnos</title>
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" href="./welcome.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+	var datax;
+
+	$(document).ready(function(){
+	 
+		var parameters = location.search.substring(1).split("&");
+
+    	var temp = parameters[0].split("=");
+    	acr = unescape(temp[1]);
+    
+    	var key = getCookie("key");   	
+    	   	
+		$.ajax({
+			type: 'GET',
+			url: 'GetAlus?acronimo=' + acr,
+			contentType: "application/json",
+			//data: {acronimo: acr},
+			dataType : 'json',
+			success: function(data){
+				
+				datax = JSON.parse(data);
+				
+				var notamedia = 0;				
+				
+				var i = 0;
+				
+				$.each(datax, function(index, elemento){					
+					
+					var aux = parseInt(elemento.nota) || 0;	
+					
+					$("#dnis").append("<a class='btn btn-primary' role='button' style='width:150px;margin-left:15px;margin-right:15px;' onclick=\"rellenar('" + elemento.alumno + "','" + aux + "');\">" + elemento.alumno + "</a>");		
+										
+					notamedia += aux;
+					
+					i = i + 1;
+					
+				});
+				
+				notamedia = notamedia/i;
+				
+				$("#nmedia").append("<code>Nota media: </code>" + notamedia);			
+				
+			},
+			error: function(e) { console.log(e); }
+		});
+	});
+	
+	
+	function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+  					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+  					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+
+	function rellenar(alumno, nota){
+		
+		//var index = parseInt(indice);
+		
+		//var ant = index - 1;
+		//var sig = index + 1;	
+		
+		var aux = parseInt(nota) || 0;
+		
+		$.ajax({
+			type: 'GET',
+			url: 'GetInfoAlu?alu=' + alumno,
+			contentType: "application/json",
+			dataType : 'json',
+			success: function(data){
+				
+				var data2 = JSON.parse(data);
+				
+				$("#infos").html("<div class='row'>" +
+					//"<a class='btn btn-secondary' role='button' style='width:150px;' onclick=\"rellenar('" + datax[ant].alumno + "','" + ant + "');\">Anterior</a>" +
+					"<h3>" + data2.nombre + " " + data2.apellidos + " (" + data2.dni + ")" +
+					//"<a class='btn btn-secondary' role='button' style='width:150px;' onclick=\"rellenar('" + datax[sig].alumno + "','" + sig + "');\">Siguiente</a></div><hr>" +
+					"</div><hr><div class='row'>" +
+					"<div class='col-3'>" +
+					"<img src='/nol2021/img/" + alumno + ".png' alt='fotoUsuario'><br/>" +
+					"<br/><label>Consultar/Modificar nota:</label>" +
+					"<input type='text' id='check' value='" + nota.toString() + "' placeholder='Introduce una nota'>" +
+					"<button onclick=\"modificarNota('" + data2.dni + "');\">Modificar Nota</button>" +
+					"</div><div class='col-9'><h4>Matriculad@ en " + acr + "</h4><br/>" +
+					"<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium, numquam unde! \n Libero accusamus doloribus dolorum iure aliquam. Officiis id libero nemo quas ea, \n voluptate est repellendus aperiam corrupti, obcaecati at! 	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam eveniet cupiditate quae dolore sed eum vero autem sunt minima, quaerat aut explicabo saepe nostrum maxime minus dolor aperiam expedita repellendus?</p>" +
+					"</div></div>"
+				);
+			},
+			error: function(e) { console.log(e); }
+		});
+	
+	}
+	
+	function modificarNota(dni){
+		
+		
+		var nuevaNota = parseInt($("#check").val());
+		
+		if(nuevaNota >= 0 && nuevaNota <= 10){
+			
+			var notaFinal = nuevaNota.toString();
+			
+			$.ajax({ 
+				type: 'PUT', 
+				url: 'ModificarNota?acronimo=' + acr + '&alumno=' + dni + '&nota=' + notaFinal,
+				contentType: 'application/json',
+				data: {acronimo: acr, alumno: dni, nota: notaFinal},
+	        	success: function(data){
+	        		alert("Nota actualizada correctamente");
+	        	}
+			}); 
+			
+		}else{
+			alert("Nota no válida, introduzcala de nuevo");
+		}
+		
+		
+		  
+	}
+	
+</script>
+</head>
+<body background='/nol2021/img/background.jpg'>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-9">
+				<h1>Gestionar notas</h1>
+			</div>
+			<div class="col-3">
+				<a class="btn btn-secondary float-end" role="button" href="CerrarSesion" style="width:150px;">Cerrar Sesión</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row" id="dnis">		
+			<h2 id="nmedia" style="font-size:140%"></h2>	
+			<h4>Alumnos matriculados:</h4>						
+		</div>
+		<br/>
+		<div class="col-12" id="infos" align="center">
+			
+		</div>
+	</div>
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="./js/bootstrap.min.js"></script>
+</body>
+</html>
